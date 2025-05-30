@@ -63,8 +63,14 @@
       <div class="section">
         <fieldset class="documents">
           <legend>К платежно-расчетному документу</legend>
-          {{ payment_document_form.number.label_tag }} {{ payment_document_form.number }} 
-          &nbsp;{{ payment_document_form.date.label_tag }} {{ payment_document_form.date }}
+          <table id="payment-documents-container">
+            <tbody class="payment-document-row">
+              <td>{{ payment_document_form.number.label_tag }} {{ payment_document_form.number }}</td>
+              <td>{{ payment_document_form.date.label_tag }} {{ payment_document_form.date }}</td>
+              <input type="hidden" name="payment_document-TOTAL_FORMS" value="1" id="id_payment_document-TOTAL_FORMS">
+            </tbody>
+          </table>
+          <button type="button" class="add-row-btn" onclick="addPaymentDocumentRow()">+ Добавить строку</button>
         </fieldset>
       </div>
 
@@ -145,9 +151,13 @@
       <div class="section">
           <fieldset class="documents">
             <legend>Документ об отгрузке</legend>
-            {{ shipping_document_form.name.label_tag }} {{ shipping_document_form.name }}
-            &nbsp;{{ shipping_document_form.number.label_tag }} {{ shipping_document_form.number }} 
-            &nbsp;{{ shipping_document_form.date.label_tag }} {{ shipping_document_form.date }}
+            <table>
+              <tbody>
+                <td>{{ shipping_document_form.name.label_tag }} {{ shipping_document_form.name }}</td>
+                <td>{{ shipping_document_form.number.label_tag }} {{ shipping_document_form.number }}</td>
+                <td>{{ shipping_document_form.date.label_tag }} {{ shipping_document_form.date }}</td>
+            </tbody>
+          </table>
           </fieldset>
       </div>
 
@@ -172,15 +182,26 @@
       <div class="section">
           <fieldset class="sections">
             <legend>Раздел продукта/товара</legend>
-            {{ product_form.section }}
+            <!-- {{ product_form.section }} -->
             <button type="button" id="show-section-form">+ Добавить раздел</button>
-            <div id="new-section-form" style="display:none; margin-top: 10px;">
+            <dialog class="modal_window_product", id="modal_window_product">
+              <!-- <form method="dialog"> -->
+                <fieldset>
+                  <legend>Новый раздел</legend>
+                  {{ section_form.name }}
+                  <div style="margin-top: 1em;">
+                    <button type="submit">Сохранить</button>
+                    <button type="button" id="close-section-form">Закрыть</button>
+                  </div>
+                </fieldset>
+              <!-- </form> -->
+            </dialog>
               <!-- <form id="section-form" method="post">
                 {% csrf_token %} -->
-                {{ section_form.name.label_tag }} {{ section_form.name }}
-                <button type="submit">Сохранить</button>
+                <!-- {{ section_form.name.label_tag }} {{ section_form.name }}
+                <button type="submit">Сохранить</button> -->
               <!-- </form> -->
-            </div>
+            <!-- </div> -->
           </fieldset>
 
           <fieldset class="product">

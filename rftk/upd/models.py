@@ -132,7 +132,7 @@ class Section(models.Model):
 
 
 class Product(models.Model):
-    section_id = models.ForeignKey(Section, on_delete=models.CASCADE)
+    section_id = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, null=True)
     name = models.TextField(blank=True)
     article = models.CharField(blank=True)
     unit = models.CharField(blank=True)
@@ -143,7 +143,7 @@ class Product(models.Model):
     number = models.CharField(default=1, blank=True)
     country_code = models.CharField(blank=True)
     country_name = models.CharField(blank=True)
-    full_sum = models.FloatField(default=0.0, blank=True)
+    full_sum = models.FloatField(default=0.0, blank=True, null=True)
     customs_declaration_num = models.TextField(blank=True)
     price = models.FloatField(default=0.0, blank=True, null=True)
 

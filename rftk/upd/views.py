@@ -7,6 +7,8 @@ from datetime import date
 
 
 def index(request):
+    # PaymentDocumentFormSet = forms.PaymentDocumentFormSet(request.POST or None, prefix='payment_document')
+    
     invoice_form = forms.InvoiceForm(request.POST or None)
     advance_payment_form = forms.AdvancePaymentForm(request.POST or None)
     payment_document_form = forms.PaymentDocumentForm(request.POST or None)
@@ -26,6 +28,8 @@ def index(request):
     output_settings_form = forms.OutputSettingsForm(request.POST or None)
 
     forms_dict = {
+                # "PaymentDocumentFormSet": PaymentDocumentFormSet,
+
                 "invoice_form": invoice_form,
                 "advance_payment_form": advance_payment_form,
                 "payment_document_form": payment_document_form,
@@ -130,3 +134,11 @@ def create_consignee(request):
 #     else:
 #         form = SectionForm()
 #     return render(request, 'modal_section.html', {'form': form})
+
+
+def create_section_ajax(request):
+    form = SectionForm(request.POST)
+    if form.is_valid():
+        section = form.save()
+        return JsonResponse({"id": section.id, "name": section.name})
+    return JsonResponse({"errors": form.errors}, status=400)

@@ -1,22 +1,4 @@
-// $("#add-section-btn").click(function () {
-//   $("#section-modal").modal("show");
-// });
-
-// $("#section-form").submit(function (e) {
-//   e.preventDefault();
-//   $.ajax({
-//     type: "POST",
-//     url: "/add_section/",
-//     data: $(this).serialize(),
-//     success: function (response) {
-//       $("#product-section").append(
-//         `<option value="${response.id}">${response.name}</option>`
-//       );
-//       $("#section-modal").modal("hide");
-//     },
-//   });
-// });
-
+// Скрипт для копирования полей при выборе "Он же"
 document.addEventListener("DOMContentLoaded", function () {
     function copyFields(fromPrefix, toPrefix, fields) {
         fields.forEach(field => {
@@ -54,36 +36,46 @@ document.addEventListener("DOMContentLoaded", function () {
     handleRelationRadios("consignee-relation_type", "buyer", "consignee", ["name", "inn", "kpp", "address", "manager_fio"]);
 });
 
+// Модальное окно для добавления раздела товара
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("modal_window_product");
+  const openBtn = document.getElementById("show-section-form");
+  const closeBtn = document.getElementById("close-section-form");
+
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", () => {
+      modal.showModal();
+    });
+  }
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => {
+      modal.close();
+    });
+  }
+});
 
 
-// document.getElementById("show-section-form").onclick = function () {
-//   document.getElementById("new-section-form").style.display = "block";
-// };
-
-// document.getElementById("section-form").onsubmit = async function (e) {
-//   e.preventDefault();
+// Добавление строк в блоках 3 и 8
+function addPaymentDocumentRow() {
+  const container = document.getElementById('payment-documents-container');
+  const totalForms = document.getElementById('id_payment_document-TOTAL_FORMS');
+  const formCount = parseInt(totalForms.value);
   
-//   const formData = new FormData(this);
-
-//   const response = await fetch("{% url 'create_section_ajax' %}", {
-//     method: "POST",
-//     body: formData,
-//     headers: {
-//       'X-CSRFToken': formData.get('csrfmiddlewaretoken')
-//     }
-//   });
-
-//   if (response.ok) {
-//     const data = await response.json();
-
-//     const select = document.getElementById("id_section");
-//     const option = new Option(data.name, data.id);
-//     option.selected = true;
-//     select.add(option);
-
-//     this.reset();
-//     document.getElementById("new-section-form").style.display = "none";
-//   } else {
-//     alert("Ошибка при добавлении раздела");
-//   }
-// };
+  const newRow = document.createElement('div');
+  newRow.className = 'payment-document-row';
+  newRow.innerHTML = `
+        <form
+          method="post"
+          action="{% url 'index' %}"
+          enctype="multipart/form-data"
+          novalidate
+        >
+          {% csrf_token %}
+      <td>{{ payment_document_form.number.label_tag }} {{ payment_document_form.number }}</td>
+      <td>{{ payment_document_form.date.label_tag }} {{ payment_document_form.date }}</td>
+      </form>`;
+  
+  container.appendChild(newRow);
+  totalForms.value = formCount + 1;
+}

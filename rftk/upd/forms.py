@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import widgets
 from . import models
+from django.forms import formset_factory
 
 
 class InvoiceForm(forms.ModelForm):
@@ -41,6 +42,8 @@ class PaymentDocumentForm(forms.ModelForm):
             "number": "№ документа",
             "date": "Дата",
         }
+
+PaymentDocumentFormSet = formset_factory(PaymentDocumentForm, extra=1)
 
 
 class ShippingDocumentForm(forms.ModelForm):
@@ -254,6 +257,11 @@ class SectionForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].initial = "По умолчанию"
+        self.fields['full_sum'].initial = 0.0
+    
     class Meta:
         model = models.Product
         fields = "__all__"
